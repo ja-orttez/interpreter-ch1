@@ -21,4 +21,15 @@ public class prog
             
             new OpExp(new NumExp(10), OpExp.Time, new IdExp("a")))),
             new PrintStm(new LastExpList(new IdExp("b")))));
+    
+    static Stm progA =
+            new AssignStm("a", new IdExp("18"));
+    
+    static Stm progB =
+            new PrintStm(new LastExpList(new IdExp("28")));
+    
+    static Stm progC =
+            new CompoundStm(new AssignStm("a",
+            new OpExp(new NumExp(7), OpExp.Plus, new NumExp(2))),
+            new PrintStm(new LastExpList(new IdExp("a"))));
 }
