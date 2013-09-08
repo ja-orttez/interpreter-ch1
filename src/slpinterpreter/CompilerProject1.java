@@ -14,7 +14,20 @@ public class CompilerProject1 {
     /* interp() */
     public static void interp(Stm s)
     {
-        
+        //interpretation
+    }
+    
+    class Table{
+        String id; int value; Table tail;
+        Table(String i, int v, Table t) {id=i;value=v;tail=t;};
+    }
+    
+    class IntAndTable{int i; Table t;
+        IntAndTable(int ii, Table tt) {i=ii; t=tt;}}
+    
+    Table interpStm(Stm s, Table t){
+        Table o = new Table("a",3,null);
+        return o;
     }
     
     static int maxargs(Stm s)
@@ -23,8 +36,10 @@ public class CompilerProject1 {
             return Math.max(maxargs(((CompoundStm)s).stm1),maxargs(((CompoundStm)s).stm2));
         else if(s instanceof AssignStm)
             return maxargs(((AssignStm)s).exp);
-        else
+        else if(s instanceof PrintStm)
             return count(((PrintStm)s).exps);
+        else
+            return 0;
     }
     
     static int maxargs(Exp e)
@@ -35,8 +50,10 @@ public class CompilerProject1 {
             return 0;
         else if(e instanceof OpExp)
             return Math.max(maxargs(((OpExp)e).left), maxargs(((OpExp)e).right));
-        else// if(e instanceof EseqExp)
+        else if(e instanceof EseqExp)
             return Math.max(maxargs(((EseqExp)e).stm),maxargs(((EseqExp)e).exp));
+        else
+            return 0;
     }
     
     static int maxargs(ExpList el)
