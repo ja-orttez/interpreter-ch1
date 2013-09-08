@@ -10,6 +10,7 @@ package slpinterpreter;
  */
 public class prog 
 {
+    // a:=5+3;b:=(print(a,a-1), 10*a);print(b)
     static Stm prog =
             new CompoundStm(new AssignStm("a",
             new OpExp(new NumExp(5),OpExp.Plus,
@@ -22,17 +23,21 @@ public class prog
             new OpExp(new NumExp(10), OpExp.Time, new IdExp("a")))),
             new PrintStm(new LastExpList(new IdExp("b")))));
     
+    // a:=18
     static Stm progA =
             new AssignStm("a", new IdExp("18"));
     
+    // print(28)
     static Stm progB =
             new PrintStm(new LastExpList(new IdExp("28")));
     
+    // a := 7 + 2; print(a)
     static Stm progC =
             new CompoundStm(new AssignStm("a",
             new OpExp(new NumExp(7), OpExp.Plus, new NumExp(2))),
             new PrintStm(new LastExpList(new IdExp("a"))));
     
+    // b:=(print(10,9,8,c:=(print(11,10,9,8,7),6),5),3)
     static Stm progD =
             new AssignStm("b", new EseqExp(
             new PrintStm(new PairExpList(new NumExp(10),

@@ -7,7 +7,7 @@ package slpinterpreter;
 import java.lang.Math;
 /**
  *
- * @author estudiante
+ * @author Javier
  */
 public class CompilerProject1 {
 
@@ -18,16 +18,32 @@ public class CompilerProject1 {
     }
     
     class Table{
-        String id; int value; Table tail;
-        Table(String i, int v, Table t) {id=i;value=v;tail=t;};
+        String id;
+        int value;
+        Table tail;
+        Table(String i, int v, Table t)
+        {
+            id=i;
+            value=v;
+            tail=t;
+        }
+        int lookup(String key)
+        {
+            return 0;
+        }
+    }
+        
+    Table interpStm(Stm s, Table t){
+        Table o = new Table("a",3,null);
+        return o;
     }
     
     class IntAndTable{int i; Table t;
         IntAndTable(int ii, Table tt) {i=ii; t=tt;}}
     
-    Table interpStm(Stm s, Table t){
-        Table o = new Table("a",3,null);
-        return o;
+    IntAndTable interExp(Exp e, Table t)
+    {
+        return null;
     }
     
     static int maxargs(Stm s)
@@ -82,6 +98,6 @@ public class CompilerProject1 {
         System.out.println(maxargs(prog.progA));
         System.out.println(maxargs(prog.progB));
         System.out.println(maxargs(prog.progC));
-        System.out.println(maxargs(prog.progD)); //Not working
+        System.out.println(maxargs(prog.progD)); //Not working right
     }
 }
