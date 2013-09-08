@@ -32,4 +32,19 @@ public class prog
             new CompoundStm(new AssignStm("a",
             new OpExp(new NumExp(7), OpExp.Plus, new NumExp(2))),
             new PrintStm(new LastExpList(new IdExp("a"))));
+    
+    static Stm progD =
+            new AssignStm("b", new EseqExp(
+            new PrintStm(new PairExpList(new NumExp(10),
+            new PairExpList(new NumExp(9),
+            new PairExpList(new NumExp(8),
+            new LastExpList(new EseqExp(
+            new AssignStm("c", new EseqExp(new PrintStm(
+            new PairExpList(new NumExp(11),
+            new PairExpList(new NumExp(10),
+            new PairExpList(new NumExp(9),
+            new PairExpList(new NumExp(8),
+            new LastExpList(new NumExp(7))))))),
+            new NumExp(6))),new NumExp(5))))))),
+            new NumExp(3)));
 }

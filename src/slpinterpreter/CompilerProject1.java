@@ -65,5 +65,6 @@ public class CompilerProject1 {
         System.out.println(maxargs(prog.progA));
         System.out.println(maxargs(prog.progB));
         System.out.println(maxargs(prog.progC));
+        System.out.println(maxargs(prog.progD)); //Not working
     }
 }
