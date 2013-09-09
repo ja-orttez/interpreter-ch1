@@ -35,9 +35,9 @@ public class CompilerProject1 {
         
     Table interpStm(Stm s, Table t){
         if(s instanceof CompoundStm)
-            return Math.max(maxargs(((CompoundStm)s).stm1),maxargs(((CompoundStm)s).stm2));
+            return interpStm(((CompoundStm)s).stm1,t);
         else if(s instanceof AssignStm)
-            return maxargs(((AssignStm)s).exp);
+            return interpStm(((AssignStm)s).exp,t);
         else if(s instanceof PrintStm)
             return count(((PrintStm)s).exps);
         return 0;
@@ -48,7 +48,16 @@ public class CompilerProject1 {
     
     IntAndTable interExp(Exp e, Table t)
     {
-        return null;
+        if(e instanceof IdExp)
+            return 0;
+        else if(e instanceof NumExp)
+            return 0;
+        else if(e instanceof OpExp)
+            return Math.max(maxargs(((OpExp)e).left), maxargs(((OpExp)e).right));
+        else if(e instanceof EseqExp)
+            return Math.max(maxargs(((EseqExp)e).stm),maxargs(((EseqExp)e).exp));
+        else
+            return 0;
     }
     
     static int maxargs(Stm s)
