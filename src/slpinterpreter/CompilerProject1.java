@@ -32,13 +32,13 @@ public class CompilerProject1 {
             if(key.equals(id))
                 return value;
             else
-                return 0;
+                return tail.lookup(key); //keep searching recursively
         }
     }
         
     Table interpStm(Stm s, Table t){
         if(s instanceof CompoundStm)
-            return interpStm(((CompoundStm)s).stm1,t); //need to account for both stm
+            return interpStm(((CompoundStm)s).stm1,interpStm(((CompoundStm)s).stm2,t));
         else if(s instanceof AssignStm)
             return interpStm(((AssignStm)s).exp,t);
         else if(s instanceof PrintStm)
@@ -52,9 +52,9 @@ public class CompilerProject1 {
     IntAndTable interExp(Exp e, Table t)
     {
         if(e instanceof IdExp)
-            return new IntAndTable(e,t);
+            return new IntAndTable(((IdExp)e).id,t);
         else if(e instanceof NumExp)
-            return 0;
+            return new IntAndTable(((NumExp)e).num,t);
         else if(e instanceof OpExp)
             return interExp(maxargs(((OpExp)e).left), interExp(((OpExp)e).right));
         else if(e instanceof EseqExp)
