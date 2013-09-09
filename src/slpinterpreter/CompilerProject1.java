@@ -29,17 +29,20 @@ public class CompilerProject1 {
         }
         int lookup(String key)
         {
-            return 0;
+            if(key.equals(id))
+                return value;
+            else
+                return 0;
         }
     }
         
     Table interpStm(Stm s, Table t){
         if(s instanceof CompoundStm)
-            return interpStm(((CompoundStm)s).stm1,t);
+            return interpStm(((CompoundStm)s).stm1,t); //need to account for both stm
         else if(s instanceof AssignStm)
             return interpStm(((AssignStm)s).exp,t);
         else if(s instanceof PrintStm)
-            return count(((PrintStm)s).exps);
+            return interpStm(((PrintStm)s).exps);
         return 0;
     }
     
@@ -49,13 +52,13 @@ public class CompilerProject1 {
     IntAndTable interExp(Exp e, Table t)
     {
         if(e instanceof IdExp)
-            return 0;
+            return new IntAndTable(e,t);
         else if(e instanceof NumExp)
             return 0;
         else if(e instanceof OpExp)
-            return Math.max(maxargs(((OpExp)e).left), maxargs(((OpExp)e).right));
+            return interExp(maxargs(((OpExp)e).left), interExp(((OpExp)e).right));
         else if(e instanceof EseqExp)
-            return Math.max(maxargs(((EseqExp)e).stm),maxargs(((EseqExp)e).exp));
+            return interExp((((EseqExp)e).stm),interExp(((EseqExp)e).exp));
         else
             return 0;
     }
