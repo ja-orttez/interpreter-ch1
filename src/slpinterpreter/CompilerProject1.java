@@ -34,8 +34,13 @@ public class CompilerProject1 {
     }
         
     Table interpStm(Stm s, Table t){
-        Table o = new Table("a",3,null);
-        return o;
+        if(s instanceof CompoundStm)
+            return Math.max(maxargs(((CompoundStm)s).stm1),maxargs(((CompoundStm)s).stm2));
+        else if(s instanceof AssignStm)
+            return maxargs(((AssignStm)s).exp);
+        else if(s instanceof PrintStm)
+            return count(((PrintStm)s).exps);
+        return 0;
     }
     
     class IntAndTable{int i; Table t;
