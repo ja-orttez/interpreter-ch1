@@ -40,7 +40,10 @@ public class CompilerProject1 {
         if(s instanceof CompoundStm)
             return interpStm(((CompoundStm)s).stm1,interpStm(((CompoundStm)s).stm2,t));
         else if(s instanceof AssignStm)
-            return interpStm(((AssignStm)s).exp,t);
+        {
+            IntAndTable it = new interExp(((AssignStm)s).exp,t);
+            return new Table(((AssignStm)s).id,it.i,it.t);
+        }
         else if(s instanceof PrintStm)
             return interpStm(((PrintStm)s).exps);
         return 0;
@@ -52,7 +55,7 @@ public class CompilerProject1 {
     IntAndTable interExp(Exp e, Table t)
     {
         if(e instanceof IdExp)
-            return new IntAndTable(((IdExp)e).id,t);
+            return new IntAndTable(t.lookup(((IdExp)e).id),t); //
         else if(e instanceof NumExp)
             return new IntAndTable(((NumExp)e).num,t);
         else if(e instanceof OpExp)
