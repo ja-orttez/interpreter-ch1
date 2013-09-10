@@ -17,24 +17,6 @@ public class CompilerProject1 {
         //interpretation
     }
     
-    class Table{
-        String id;
-        int value;
-        Table tail;
-        Table(String i, int v, Table t)
-        {
-            id=i;
-            value=v;
-            tail=t;
-        }
-        int lookup(String key)
-        {
-            if(key.equals(id))
-                return value;
-            else
-                return tail.lookup(key); //keep searching recursively
-        }
-    }
         
     Table interpStm(Stm s, Table t){
         if(s instanceof CompoundStm)
@@ -49,8 +31,6 @@ public class CompilerProject1 {
         return 0;
     }
     
-    class IntAndTable{int i; Table t;
-        IntAndTable(int ii, Table tt) {i=ii; t=tt;}}
     
     IntAndTable interExp(Exp e, Table t)
     {
@@ -72,8 +52,8 @@ public class CompilerProject1 {
             return Math.max(maxargs(((CompoundStm)s).stm1),maxargs(((CompoundStm)s).stm2));
         else if(s instanceof AssignStm)
             return maxargs(((AssignStm)s).exp);
-        else if(s instanceof PrintStm)
-            return count(((PrintStm)s).exps);
+        else if(s instanceof PrintStm)//stm vs exp
+            return Math.max(count(((PrintStm)s).exps),maxargs(((PrintStm)s).exps));
         else
             return 0;
     }
