@@ -14,37 +14,62 @@ public class CompilerProject1 {
     /* interp() */
     public static void interp(Stm s)
     {
-        //interpretation
+        interpStm(s,null);//interpretation
     }
     
         
-    Table interpStm(Stm s, Table t){
+    static Table interpStm(Stm s, Table t){
         if(s instanceof CompoundStm)
             return interpStm(((CompoundStm)s).stm1,interpStm(((CompoundStm)s).stm2,t));
         else if(s instanceof AssignStm)
         {
-            IntAndTable it = new interExp(((AssignStm)s).exp,t);
+            IntAndTable it = interExp(((AssignStm)s).exp,t);
             return new Table(((AssignStm)s).id,it.i,it.t);
         }
-        else if(s instanceof PrintStm)
-            return interpStm(((PrintStm)s).exps);
-        return 0;
+        else// if(s instanceof PrintStm)
+            return interPrint(((PrintStm)s).exps,t);
     }
     
     
-    IntAndTable interExp(Exp e, Table t)
+    static IntAndTable interExp(Exp e, Table t)
     {
         if(e instanceof IdExp)
             return new IntAndTable(t.lookup(((IdExp)e).id),t); //
         else if(e instanceof NumExp)
             return new IntAndTable(((NumExp)e).num,t);
         else if(e instanceof OpExp)
-            return interExp(maxargs(((OpExp)e).left), interExp(((OpExp)e).right));
+        {
+            IntAndTable iat1 = interExp(((OpExp)e).left,t);
+            IntAndTable iat2 = interExp(((OpExp)e).right,t);
+            int total;
+            if(((OpExp)e).oper == 1)
+                total = iat1.i+iat2.i;
+            else if(((OpExp)e).oper == 2)
+                total = iat1.i-iat2.i;
+            else if(((OpExp)e).oper == 3)
+                total = iat1.i*iat2.i;
+            else// if(((OpExp)e).oper == 4)
+                total = iat1.i/iat2.i;
+            return new IntAndTable(total,t);
+        }
         else if(e instanceof EseqExp)
-            return interExp((((EseqExp)e).stm),interExp(((EseqExp)e).exp));
+            return interExp(((EseqExp)e).exp,interpStm(((EseqExp)e).stm,t));
         else
-            return 0;
+            return null;
     }
+    
+    static Table interPrint(ExpList el, Table t)
+    {
+        if(el instanceof PairExpList)
+        {
+            System.out.print(((PairExpList)el).head + " ");
+        }
+        else//if(el instanceof LastExpList)
+        {
+            System.out.println(((LastExpList)el).head);
+        }
+        return t.tail;
+    }    
     
     static int maxargs(Stm s)
     {
@@ -98,6 +123,7 @@ public class CompilerProject1 {
         System.out.println(maxargs(prog.progA));
         System.out.println(maxargs(prog.progB));
         System.out.println(maxargs(prog.progC));
-        System.out.println(maxargs(prog.progD)); //Not working right
+        System.out.println(maxargs(prog.progD));
+        interp(prog.progB);
     }
 }
