@@ -1,12 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//*************************************************************************************//
+//  NAME: Javier Ortiz Cortez                                                          //
+//  CLASS: CSC416                                                                      //
+//  ASSIGNMENT: Assignment 1                                                           //
+//  FILENAME: Table                                                                    //
+//  DATE: September 17, 2013                                                           //
+//  DESCRIOTION: The following program defines a singly linked list containing a       //
+//      String, an int, and an object like itself                                      //
+//*************************************************************************************//
 package slpinterpreter;
 
 /**
  *
- * @author estudiante
+ * @author Javier
  */
 public class Table {
     String id;
@@ -25,5 +30,5 @@ public class Table {
             return value;
         else
             return tail.lookup(key); //keep searching recursively
-        }
+    }
 }

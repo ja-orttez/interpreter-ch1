@@ -1,7 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//*************************************************************************************//
+//  NAME: Javier Ortiz Cortez                                                          //
+//  CLASS: CSC416                                                                      //
+//  ASSIGNMENT: Assignment 1                                                           //
+//  FILENAME: PrintStm                                                                 //
+//  DATE: September 17, 2013                                                           //
+//  DESCRIOTION: This class defines a PrintStm object                                  //
+//*************************************************************************************//
 package slpinterpreter;
 
 /**

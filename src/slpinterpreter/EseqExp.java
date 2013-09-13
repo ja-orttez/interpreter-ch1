@@ -1,12 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//*************************************************************************************//
+//  NAME: Javier Ortiz Cortez                                                          //
+//  CLASS: CSC416                                                                      //
+//  ASSIGNMENT: Assignment 1                                                           //
+//  FILENAME: PairExpList                                                              //
+//  DATE: September 17, 2013                                                           //
+//  DESCRIOTION: This class defines an EseqExp object                                  //
+//*************************************************************************************//
 package slpinterpreter;
 
 /**
  *
- * @author estudiante
+ * @author Javier
  */
 public class EseqExp extends Exp 
 {

@@ -1,12 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+//*************************************************************************************//
+//  NAME: Javier Ortiz Cortez                                                          //
+//  CLASS: CSC416                                                                      //
+//  ASSIGNMENT: Assignment 1                                                           //
+//  FILENAME: Exp                                                                      //
+//  DATE: September 17, 2013                                                           //
+//  DESCRIOTION: This program creates Stm objects as well as other corresponding       //
+//      objects for the single line language to be interpreted in the main method      //
+//*************************************************************************************//
 package slpinterpreter;
 
 /**
  *
- * @author estudiante
+ * @author Javier
  */
 public class prog 
 {
@@ -25,11 +30,11 @@ public class prog
     
     // a:=18
     static Stm progA =
-            new AssignStm("a", new IdExp("18"));
+            new AssignStm("a", new NumExp(18));
     
     // print(28)
     static Stm progB =
-            new PrintStm(new LastExpList(new IdExp("28")));
+            new PrintStm(new LastExpList(new NumExp(28)));
     
     // a := 7 + 2; print(a)
     static Stm progC =
