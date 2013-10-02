@@ -1,0 +1,113 @@
+options {
+  JAVA_UNICODE_ESCAPE = true;
+}
+
+PARSER_BEGIN(RamParser)
+  package frontend.generated;
+  public class RamParser {}
+PARSER_END(RamParser)
+
+
+// Insert a specification of a lexical analysis here. 
+
+/* The regular expressions here will be skipped during lexical analysis. No
+tokens are constructed from the productions that are defined here. */
+SKIP : {
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+
+/* Insert the regular expressions for comments here. Special tokens do not
+interact in the parsing process, but can be accessed from the parser. */
+SPECIAL_TOKEN: {
+<COMMENT: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
+| <COMMENTLINES: ("/*")(~["*","/"])*("*/")>
+}
+
+
+/* For the regular expressions on the right, the token on the left 
+will be returned */
+TOKEN : {
+  <CLASS: "class">
+| <LBRACE: "{">
+| <RBRACE: "}">
+| <PUBLIC: "public">
+| <STATIC: "static">
+| <VOID : "void">
+| <MAIN: "main">
+| <LPAREN: "(">
+| <RPAREN: ")">
+| <STRING: "String">
+| <LBRAC: "[">
+| <RBRAC: "]">
+| <PLUSEQ: "+=">
+| <SEMICOL: ";">
+| <RETURN: "return">
+| <COMM: ",">
+| <INT: "int">
+| <BOOL: "bool">
+| <EQ: "=">
+| <IF: "if">
+| <ELSE: "else">
+| <WHILE: "while">
+| <PRINT: "print">
+| <PRINTLN: "println">
+| <AND: "and">
+| <OR: "or">
+| <LT: "lt">
+| <LTE: "lte">
+| <PLUS: "+">
+| <MINUS: "-">
+| <TIMES: "*">
+| <DOT: ".">
+| <LENTGHT: "length">
+| <TRUE: "true">
+| <FALSE: "false">
+| <THIS: "this">
+| <NEW: "new">
+| <END: "!">
+| <NEWLINE: "newline">
+| <INTEGER_LITERAL: ["0"-"9"]>
+| <IDENTIFIER: (["a"-"z"]|["A"-"Z"]) (["a"-"z"]|["A"-"Z"]|["0"-"9"]|"_")*>
+}
+
+
+
+// The following is a simple grammar that will allow you
+// to test the generated lexer. Do not modify it, we will
+// do so in Chapters 3 and 4.
+void Goal() :
+{}
+{
+ /* 
+  ( RamToken() )*
+*/
+  ( RamToken() {System.out.println("Kind: " + token.kind + " line " 
+  + token.beginLine + ", column " + token.beginColumn + " - line " + 
+  token.endLine + ", column " + token.endColumn + " : " + token.image);} )* 
+  <EOF>
+
+/*
+  ( RamToken() {System.out.println("Kind: " + token.kind + " line " 
+  + token.beginLine + ", column " + token.beginColumn + " - line " + 
+  token.endLine + ", column " + token.endColumn + " : " + token.image + 
+  " " + token.specialToken);} )* 
+  <EOF>
+*/
+}
+
+void RamToken():
+{}
+{
+  "class"  |  <IDENTIFIER> | "{" | "public" | "static" | "void" |
+  "main" | "(" | "String"  | "[" | "]" | ")" | "}" | "+=" | ";"
+  | "return" | "," | "int" | "bool" | "=" | "if" | "else" | "while"
+  | "print" | "println" | "and" | "or" | "lt" | "lte" | "+" | "-" | "*" | "." |
+  "length" | <INTEGER_LITERAL> | "true" | "false" | "this" | "new" |
+  "!"
+}
+
