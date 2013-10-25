@@ -1,0 +1,24 @@
+/* This program should have at least an error */
+
+class HelloWorld {
+    public static void main(String[] a){
+		println(new LX().World())!
+    }
+} 
+class LS {
+    public int World(){
+println(_______________)!
+println(< Hello World!! >)!
+println(---------------)!
+println(   \)!
+println(    \)!
+println(        .--.)!
+println(       |o_o |)!
+println(       |:_/ |)!
+println(      //   \ \)!
+println(     (|     | ))!
+println(    /'\_   _/`\)!
+print(    \___)!println(=(___/))!
+println()!
+return 0!
+}

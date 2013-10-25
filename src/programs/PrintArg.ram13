@@ -1,0 +1,15 @@
+/* This program should not work completely */
+
+class PrintArg {
+    public static void main(String[] a) {
+        println(new Arg().Printing(10))! 
+    }
+}
+class Arg {
+    public void Printing(int num) { 
+        string a "Argument "!	// ! replace ;'s!
+        while (num lt 2)		// is num < 1?
+            println(a + num)!
+        return num;
+    }
+}

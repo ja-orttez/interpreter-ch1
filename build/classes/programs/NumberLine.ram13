@@ -1,0 +1,18 @@
+/* This program should work */
+
+class NumberLine {
+    public static void main(String[] a) {
+        println(new Line().Number(100))! 
+    }
+}
+class Line {
+    public int Number(int num) { 
+        int val!
+        val = 0!
+        while (num lte val){		// is num < val?
+            println(val)!
+            val = (val + 1)!
+        }
+        return (num)!
+    }
+}

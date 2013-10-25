@@ -1,0 +1,255 @@
+options {
+  JAVA_UNICODE_ESCAPE = true;
+    DEBUG_PARSER = true;
+}
+
+PARSER_BEGIN(RamParser)
+  package frontend.generated;
+  public class RamParser {}
+PARSER_END(RamParser)
+
+
+// Insert a specification of a lexical analysis here. 
+
+/* The regular expressions here will be skipped during lexical analysis. No
+tokens are constructed from the productions that are defined here. */
+SKIP : {
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+
+/* Insert the regular expressions for comments here. Special tokens do not
+interact in the parsing process, but can be accessed from the parser. */
+SPECIAL_TOKEN: {
+<COMMENT: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
+| <COMMENTLINES: ("/*")(~["*","/"])*("*/")>
+}
+
+
+/* For the regular expressions on the right, the token on the left 
+will be returned */
+TOKEN : {
+  <CLASS: "class">
+| <LBRACE: "{">
+| <RBRACE: "}">
+| <PUBLIC: "public">
+| <STATIC: "static">
+| <VOID : "void">
+| <MAIN: "main">
+| <LPAREN: "(">
+| <RPAREN: ")">
+| <STRING: "String">
+| <LBRAC: "[">
+| <RBRAC: "]">
+| <PLUSEQ: "+=">
+| <COLLON: ":">
+| <SEMICOL: ";">
+| <FOREACH: "foreach">
+| <RETURN: "return">
+| <COMMA: ",">
+| <INT: "int">
+| <BOOL: "bool">
+| <ASSIGN: "=">
+| <EQUALITY: "eq">
+| <IF: "if">
+| <ELSE: "else">
+| <WHILE: "while">
+| <PRINT: "print">
+| <PRINTLN: "println">
+| <AND: "and">
+| <OR: "or">
+| <LESSTHAN: "lt">
+| <LESSTHANEQ: "lte">
+| <PLUS: "+">
+| <MINUS: "-">
+| <TIMES: "*">
+| <DOT: ".">
+| <LENGTH: "length">
+| <TRUE: "true">
+| <FALSE: "false">
+| <THIS: "this">
+| <NEW: "new">
+| <END: "!">
+| <NEWLINE: "newline">
+| <INTEGER_LITERAL: ["0"-"9"] (["0"-"9"])*>
+| <IDENTIFIER: (["a"-"z"]|["A"-"Z"]) (["a"-"z"]|["A"-"Z"]|["0"-"9"]|"_")*>
+}
+
+
+void Goal() :
+{}
+{  
+  /* ( RamToken() )*  <EOF> */
+  Program() <EOF>
+}
+
+void RamToken():{}
+{
+  <CLASS>  |  <IDENTIFIER> | <LBRACE> | <PUBLIC> | 
+  <STATIC> | <VOID> | <MAIN> | <LPAREN> | 
+  <STRING> | <LBRAC> | <RBRAC> | <RPAREN> | 
+  <RBRACE> | <PLUSEQ> | <SEMICOL> | <RETURN> | 
+  <COMMA> | <INT> | <BOOL> | <ASSIGN> |
+  <IF> | <ELSE> | <WHILE> | <FOREACH> | <COLLON> | 
+  <PRINT> | <PRINTLN> | <AND> | <OR> | <LESSTHAN> | 
+  <LESSTHANEQ> | <EQUALITY> | <PLUS> | <MINUS> | 
+  <TIMES> | <DOT> | <LENGTH> | <INTEGER_LITERAL> | 
+  <TRUE> | <FALSE> | <THIS> | <NEW> | <END>
+}
+
+void Program():{}
+{
+  MainClass() ( ClassDecl() )*
+}
+
+/* MainClass() 	->  class id { public static void main ( String [ ] id ) { Statement } } */
+void MainClass():{}
+{
+  <CLASS> <IDENTIFIER> <LBRACE> <PUBLIC> <STATIC> 
+  <VOID> <MAIN> <LPAREN> <STRING> <LBRAC> 
+  <RBRAC> <IDENTIFIER> <RPAREN> <LBRACE> Statement() 
+  <RBRACE> <RBRACE>
+}
+
+/* ClassDecl 	-> 	class id { VarDecl* MethodDecl* } */
+void ClassDecl() :
+{}
+{
+    <CLASS> <IDENTIFIER> <LBRACE> ( VarDecl() )* ( MethodDecl() )* <RBRACE>
+}
+
+/* VarDecl 	-> 	Type id ! */
+void VarDecl():{}
+{
+    Type() <IDENTIFIER> <END>
+}
+
+/* MethodDecl 	-> 	public Type id ( FormalList ) { VarDecl* Statement* return Exp ! } */
+void MethodDecl():{}
+{
+    <PUBLIC> Type() <IDENTIFIER> <LPAREN> FormalList() <RPAREN> <LBRACE>
+    (LOOKAHEAD(2) VarDecl() )* ( Statement() )* <RETURN> Exp() <END> <RBRACE>
+}
+
+/* FormalList 	-> 	Type id FormalRest* */
+void FormalList():{}
+{
+    [Type() <IDENTIFIER> ( FormalRest() )*]
+}
+
+/* FormalRest 	-> 	, Type id */
+void FormalRest():{}
+{
+    <COMMA> Type() <IDENTIFIER>
+}
+
+/* Type 	-> 	int []	| bool	| int |	id */
+void Type():{}
+{
+    LOOKAHEAD(2) <INT> <LBRAC> <RBRAC>
+   |<BOOL>
+   |<INT>
+   |<IDENTIFIER>
+}
+
+/* Statement 	-> 	{ Statement* }
+	| 	if ( Exp ) Statement else Statement
+	| 	while ( Exp ) Statement
+	| 	foreach ( Type id : id ) Statement
+	| 	print ( ExpList ) !
+	| 	println ( ExpList ) !
+	| 	id = Exp !
+	| 	id += Exp !
+	| 	id [ Exp ] = Exp ! */
+void Statement():{}
+{
+    <LBRACE> ( Statement() )* <RBRACE>
+   |<IF> <LPAREN> Exp() <RPAREN> Statement() <ELSE> Statement()
+   |<WHILE> <LPAREN> Exp() <RPAREN> Statement()
+   |<FOREACH> <LPAREN> Type() <IDENTIFIER> <COLLON> 
+    <IDENTIFIER> <RPAREN> Statement()
+   |<PRINT> <LPAREN> ExpList() <RPAREN> <END>
+   |<PRINTLN> <LPAREN> ExpList() <RPAREN> <END>
+   | LOOKAHEAD(2) <IDENTIFIER> <ASSIGN> Exp() <END>
+   | LOOKAHEAD(2) <IDENTIFIER> <PLUSEQ> Exp() <END>
+   | <IDENTIFIER> <LBRAC> Exp() <RBRAC> <ASSIGN> Exp() <END>
+}
+
+/*
+Exp 	-> 	
+		<INTEGER_LITERAL> Exp'
+	| 	true Exp'
+	| 	false Exp'
+	| 	id Exp'
+	| 	this Exp'
+	| 	; Exp
+	| 	( Exp )
+	 	Lookahead(2)
+	|	new int [ Exp ]
+	| 	new id ( ) */
+void Exp():{}
+{
+   <INTEGER_LITERAL> ExpPrime()
+   |<TRUE> ExpPrime()
+   |<FALSE> ExpPrime()
+   |<IDENTIFIER> ExpPrime()
+   |<THIS> ExpPrime()
+   |<SEMICOL> Exp()
+   |<LPAREN> Exp() <RPAREN>
+   | LOOKAHEAD(2) <NEW> <INT> <LBRAC> Exp() <RBRAC> ExpPrime()
+   |<NEW> <IDENTIFIER> <LPAREN> <RPAREN> ExpPrime()
+}
+
+/*
+Exp' -> [lookahead(2) //optional since 'AND' 'AND' not part of lang
+			op Exp
+		| [Exp] Exp'
+		| . length Exp'
+		| . id (ExpList)
+			]
+			 */
+void ExpPrime():{}
+{
+    [ op() Exp() ExpPrime()
+    |<LBRAC> Exp() <RBRAC> ExpPrime()
+    | LOOKAHEAD(2) <DOT> <LENGTH> ExpPrime()
+    |<DOT> <IDENTIFIER> <LPAREN> ExpList() <RPAREN> ]
+}
+
+
+
+/* ExpList 	-> 	Exp ExpRest* */
+void ExpList():{}
+{
+    Exp() ( (ExpRest()) )*
+   |[<LBRAC><RBRAC>]
+}
+
+/* ExpRest 	-> 	, Exp */
+void ExpRest ():{}
+{
+    <COMMA> Exp()
+}
+
+/* id 	-> 	<IDENTIFIER> */
+void id ():{}
+{
+    <IDENTIFIER>
+}
+
+/* op 	-> 	and | or | lt | lte | + | - | * */
+void op():{}
+{
+    <AND>
+   |<OR>
+   |<LESSTHAN>
+   |<LESSTHANEQ>
+   |<PLUS>
+   |<MINUS>
+   |<TIMES>
+   // |<EQUALITY>
+}
