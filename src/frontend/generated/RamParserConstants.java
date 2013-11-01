@@ -11,97 +11,101 @@ public interface RamParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int COMMENT = 6;
+  int SINGLE_LINE_COMMENT = 6;
   /** RegularExpression Id. */
-  int COMMENTLINES = 7;
+  int FORMAL_COMMENT = 7;
   /** RegularExpression Id. */
-  int CLASS = 8;
+  int MULTI_LINE_COMMENT = 8;
   /** RegularExpression Id. */
-  int LBRACE = 9;
+  int LPAREN = 9;
   /** RegularExpression Id. */
-  int RBRACE = 10;
+  int RPAREN = 10;
   /** RegularExpression Id. */
-  int PUBLIC = 11;
+  int LBRAC = 11;
   /** RegularExpression Id. */
-  int STATIC = 12;
+  int RBRAC = 12;
   /** RegularExpression Id. */
-  int VOID = 13;
+  int LBRACE = 13;
   /** RegularExpression Id. */
-  int MAIN = 14;
+  int RBRACE = 14;
   /** RegularExpression Id. */
-  int LPAREN = 15;
+  int SEMICOLON = 15;
   /** RegularExpression Id. */
-  int RPAREN = 16;
+  int COLON = 16;
   /** RegularExpression Id. */
-  int STRING = 17;
+  int COMMA = 17;
   /** RegularExpression Id. */
-  int LBRAC = 18;
+  int DOT = 18;
   /** RegularExpression Id. */
-  int RBRAC = 19;
+  int ASSIGN = 19;
   /** RegularExpression Id. */
-  int PLUSEQ = 20;
+  int LESSTHAN = 20;
   /** RegularExpression Id. */
-  int COLLON = 21;
+  int LESSTHANEQ = 21;
   /** RegularExpression Id. */
-  int SEMICOL = 22;
+  int PLUSEQ = 22;
   /** RegularExpression Id. */
-  int FOREACH = 23;
+  int EQUALITY = 23;
   /** RegularExpression Id. */
-  int RETURN = 24;
+  int PLUS = 24;
   /** RegularExpression Id. */
-  int COMMA = 25;
+  int MINUS = 25;
   /** RegularExpression Id. */
-  int INT = 26;
+  int TIMES = 26;
   /** RegularExpression Id. */
-  int BOOL = 27;
+  int AND = 27;
   /** RegularExpression Id. */
-  int ASSIGN = 28;
+  int OR = 28;
   /** RegularExpression Id. */
-  int EQUALITY = 29;
+  int END = 29;
   /** RegularExpression Id. */
-  int IF = 30;
+  int BOOLEAN = 30;
   /** RegularExpression Id. */
-  int ELSE = 31;
+  int CLASS = 31;
   /** RegularExpression Id. */
-  int WHILE = 32;
+  int ELSE = 32;
   /** RegularExpression Id. */
-  int PRINT = 33;
+  int FALSE = 33;
   /** RegularExpression Id. */
-  int PRINTLN = 34;
+  int IF = 34;
   /** RegularExpression Id. */
-  int AND = 35;
+  int WHILE = 35;
   /** RegularExpression Id. */
-  int OR = 36;
+  int FOREACH = 36;
   /** RegularExpression Id. */
-  int LESSTHAN = 37;
+  int INT = 37;
   /** RegularExpression Id. */
-  int LESSTHANEQ = 38;
+  int LENGTH = 38;
   /** RegularExpression Id. */
-  int PLUS = 39;
+  int MAIN = 39;
   /** RegularExpression Id. */
-  int MINUS = 40;
+  int NEW = 40;
   /** RegularExpression Id. */
-  int TIMES = 41;
+  int PUBLIC = 41;
   /** RegularExpression Id. */
-  int DOT = 42;
+  int RETURN = 42;
   /** RegularExpression Id. */
-  int LENGTH = 43;
+  int STATIC = 43;
   /** RegularExpression Id. */
-  int TRUE = 44;
+  int STRING = 44;
   /** RegularExpression Id. */
-  int FALSE = 45;
+  int THIS = 45;
   /** RegularExpression Id. */
-  int THIS = 46;
+  int TRUE = 46;
   /** RegularExpression Id. */
-  int NEW = 47;
+  int PRINT = 47;
   /** RegularExpression Id. */
-  int END = 48;
+  int PRINTLN = 48;
   /** RegularExpression Id. */
-  int NEWLINE = 49;
+  int VOID = 49;
   /** RegularExpression Id. */
   int INTEGER_LITERAL = 50;
   /** RegularExpression Id. */
   int IDENTIFIER = 51;
+  /** RegularExpression Id. */
+  int LETTER = 52;
+  /** RegularExpression Id. */
+  int DIGIT = 53;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -114,52 +118,54 @@ public interface RamParserConstants {
     "\"\\n\"",
     "\"\\r\"",
     "\"\\f\"",
-    "<COMMENT>",
-    "<COMMENTLINES>",
-    "\"class\"",
-    "\"{\"",
-    "\"}\"",
-    "\"public\"",
-    "\"static\"",
-    "\"void\"",
-    "\"main\"",
+    "<SINGLE_LINE_COMMENT>",
+    "<FORMAL_COMMENT>",
+    "<MULTI_LINE_COMMENT>",
     "\"(\"",
     "\")\"",
-    "\"String\"",
     "\"[\"",
     "\"]\"",
-    "\"+=\"",
-    "\":\"",
+    "\"{\"",
+    "\"}\"",
     "\";\"",
-    "\"foreach\"",
-    "\"return\"",
+    "\":\"",
     "\",\"",
-    "\"int\"",
-    "\"bool\"",
+    "\".\"",
     "\"=\"",
-    "\"eq\"",
-    "\"if\"",
-    "\"else\"",
-    "\"while\"",
-    "\"print\"",
-    "\"println\"",
-    "\"and\"",
-    "\"or\"",
     "\"lt\"",
     "\"lte\"",
+    "\"+=\"",
+    "\"==\"",
     "\"+\"",
     "\"-\"",
     "\"*\"",
-    "\".\"",
-    "\"length\"",
-    "\"true\"",
-    "\"false\"",
-    "\"this\"",
-    "\"new\"",
+    "\"and\"",
+    "\"or\"",
     "\"!\"",
-    "\"newline\"",
+    "\"bool\"",
+    "\"class\"",
+    "\"else\"",
+    "\"false\"",
+    "\"if\"",
+    "\"while\"",
+    "\"foreach\"",
+    "\"int\"",
+    "\"length\"",
+    "\"main\"",
+    "\"new\"",
+    "\"public\"",
+    "\"return\"",
+    "\"static\"",
+    "\"String\"",
+    "\"this\"",
+    "\"true\"",
+    "\"print\"",
+    "\"println\"",
+    "\"void\"",
     "<INTEGER_LITERAL>",
     "<IDENTIFIER>",
+    "<LETTER>",
+    "<DIGIT>",
   };
 
 }
