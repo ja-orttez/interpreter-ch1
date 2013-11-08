@@ -1,0 +1,14 @@
+/* working program */
+
+class Display{
+	public static void main(String[] a){
+		println(new Add().it())!
+	}
+}
+
+class Add {
+	public int it(){
+		print(Welcome)!
+                return 1!
+	}
+}

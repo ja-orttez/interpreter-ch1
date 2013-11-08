@@ -1,0 +1,22 @@
+/* This program works */
+
+class ModifiedCat{
+	public static void main(String[] a){
+		println(new Cat().Meow())!
+	}
+}
+
+class Cat {
+	public bool Meow(){
+		print (You)!
+		print (have)!
+		print (cat)!
+		print (to)!
+		print (be)!
+		print (kitten)!
+		print (me)!
+		print (right)!
+		print (meow)!
+		return true!
+	}
+}

@@ -1,0 +1,13 @@
+/* working program */
+
+class ModifiedSigma{
+	public static void main(String[] a){
+		println(new Add().it())!
+	}
+}
+
+class Add {
+	public int it(){
+		return 5050!
+	}
+}

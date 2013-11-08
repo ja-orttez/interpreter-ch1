@@ -1,0 +1,23 @@
+/* This program works */
+
+class Garbage{
+	public static void main(String[] a){
+		println(new Access().A())!
+	}
+}
+
+class Access {
+	public int A(){
+		int one!
+		println(0)!
+		println(3)!
+		println(this.four(4))!
+		return true!
+	}
+	
+	public bool four(int a) {
+		println(a)!
+		return true!
+	}
+
+}

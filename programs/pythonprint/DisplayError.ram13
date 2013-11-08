@@ -1,0 +1,14 @@
+/*  not  a working program */
+
+class DisplayError{
+	public static void main(String[] a){
+		println(new Add().it())!
+	}
+}
+
+class Add {
+	public bool it(){
+		print(Welcome to my world of compilers.)!
+                return false!
+	}
+}
