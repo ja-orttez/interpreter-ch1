@@ -159,6 +159,7 @@ void RamToken():
       case LBRACE:
       case IF:
       case WHILE:
+      case FOREACH:
       case PRINT:
       case PRINTLN:
       case IDENTIFIER:
@@ -271,6 +272,8 @@ void RamToken():
     Statement s2;
     Exp e2;
     Identifier i;
+    Identifier i2;
+    Type t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
       jj_consume_token(LBRACE);
@@ -280,6 +283,7 @@ void RamToken():
         case LBRACE:
         case IF:
         case WHILE:
+        case FOREACH:
         case PRINT:
         case PRINTLN:
         case IDENTIFIER:
@@ -312,6 +316,19 @@ void RamToken():
       jj_consume_token(RPAREN);
       s1 = Statement();
       {if (true) return new While(e1, s1);}
+      break;
+    case FOREACH:
+      jj_consume_token(FOREACH);
+      jj_consume_token(LPAREN);
+      t = Type();
+      jj_consume_token(IDENTIFIER);
+                   i = new Identifier(token.image);
+      jj_consume_token(COLON);
+      jj_consume_token(IDENTIFIER);
+                   i2 = new Identifier(token.image);
+      jj_consume_token(RPAREN);
+      s1 = Statement();
+      {if (true) return new Foreach(t, i, i, s1);}
       break;
     case PRINT:
       jj_consume_token(PRINT);
@@ -393,6 +410,24 @@ void RamToken():
     throw new Error("Missing return statement in function");
   }
 
+  static final public Exp OrExp() throws ParseException {
+    Exp e1, e2;
+    e1 = EqualityExp();
+    label_9:
+    while (true) {
+      if (jj_2_6(2)) {
+        ;
+      } else {
+        break label_9;
+      }
+      jj_consume_token(OR);
+      e2 = EqualityExp();
+          e1 = new Or(e1, e2);
+    }
+      {if (true) return e1;}
+    throw new Error("Missing return statement in function");
+  }
+
   static final public Exp EqualityExp() throws ParseException {
     Exp e;
     e = RelationalExp();
@@ -403,16 +438,29 @@ void RamToken():
   static final public Exp RelationalExp() throws ParseException {
     Exp e1, e2;
     e1 = AdditiveExp();
-    label_9:
+    label_10:
     while (true) {
-      if (jj_2_6(2)) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LESSTHAN:
+      case LESSTHANEQ:
         ;
-      } else {
-        break label_9;
+        break;
+      default:
+        jj_la1[10] = jj_gen;
+        break label_10;
       }
-      jj_consume_token(LESSTHAN);
-      e2 = AdditiveExp();
+      if (jj_2_7(2)) {
+        jj_consume_token(LESSTHAN);
+        e2 = AdditiveExp();
           e1 = new LessThan(e1, e2);
+      } else if (jj_2_8(2)) {
+        jj_consume_token(LESSTHANEQ);
+        e2 = AdditiveExp();
+          e1 = new LessThanEq(e1, e2);
+      } else {
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
     }
       {if (true) return e1;}
     throw new Error("Missing return statement in function");
@@ -421,7 +469,7 @@ void RamToken():
   static final public Exp AdditiveExp() throws ParseException {
     Exp e1, e2;
     e1 = MultiplicativeExp();
-    label_10:
+    label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
@@ -429,10 +477,10 @@ void RamToken():
         ;
         break;
       default:
-        jj_la1[10] = jj_gen;
-        break label_10;
+        jj_la1[11] = jj_gen;
+        break label_11;
       }
-      if (jj_2_7(2)) {
+      if (jj_2_9(2)) {
         jj_consume_token(PLUS);
         e2 = MultiplicativeExp();
           e1 = new Plus(e1, e2);
@@ -444,7 +492,7 @@ void RamToken():
           e1 = new Minus(e1, e2);
           break;
         default:
-          jj_la1[11] = jj_gen;
+          jj_la1[12] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -457,12 +505,12 @@ void RamToken():
   static final public Exp MultiplicativeExp() throws ParseException {
     Exp e1, e2;
     e1 = UnaryExp();
-    label_11:
+    label_12:
     while (true) {
-      if (jj_2_8(2)) {
+      if (jj_2_10(2)) {
         ;
       } else {
-        break label_11;
+        break label_12;
       }
       jj_consume_token(TIMES);
       e2 = UnaryExp();
@@ -475,15 +523,15 @@ void RamToken():
   static final public Exp UnaryExp() throws ParseException {
     Exp e;
     boolean inNot = false;
-    label_12:
+    label_13:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case SEMICOLON:
         ;
         break;
       default:
-        jj_la1[12] = jj_gen;
-        break label_12;
+        jj_la1[13] = jj_gen;
+        break label_13;
       }
       jj_consume_token(SEMICOLON);
                     inNot = !inNot;
@@ -502,7 +550,7 @@ void RamToken():
     ExpList el;
     Identifier i;
     e1 = PrefixExp();
-    label_13:
+    label_14:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LBRAC:
@@ -510,8 +558,8 @@ void RamToken():
         ;
         break;
       default:
-        jj_la1[13] = jj_gen;
-        break label_13;
+        jj_la1[14] = jj_gen;
+        break label_14;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LBRAC:
@@ -521,8 +569,8 @@ void RamToken():
           {if (true) return new ArrayLookup(e1, e2);}
         break;
       default:
-        jj_la1[14] = jj_gen;
-        if (jj_2_9(2)) {
+        jj_la1[15] = jj_gen;
+        if (jj_2_11(2)) {
           jj_consume_token(DOT);
           jj_consume_token(IDENTIFIER);
                              i = new Identifier(token.image);
@@ -538,7 +586,7 @@ void RamToken():
                          {if (true) return new ArrayLength(e1);}
             break;
           default:
-            jj_la1[15] = jj_gen;
+            jj_la1[16] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
@@ -580,8 +628,8 @@ void RamToken():
              {if (true) return new This();}
       break;
     default:
-      jj_la1[16] = jj_gen;
-      if (jj_2_10(2)) {
+      jj_la1[17] = jj_gen;
+      if (jj_2_12(2)) {
         jj_consume_token(NEW);
         jj_consume_token(INT);
         jj_consume_token(LBRAC);
@@ -599,7 +647,7 @@ void RamToken():
       {if (true) return new NewObject(i);}
           break;
         default:
-          jj_la1[17] = jj_gen;
+          jj_la1[18] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -622,22 +670,22 @@ void RamToken():
     case IDENTIFIER:
       e = Exp();
                     el.addElement(e);
-      label_14:
+      label_15:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case COMMA:
           ;
           break;
         default:
-          jj_la1[18] = jj_gen;
-          break label_14;
+          jj_la1[19] = jj_gen;
+          break label_15;
         }
         e = ExpRest();
                           el.addElement(e);
       }
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       ;
     }
       {if (true) return el;}
@@ -722,131 +770,61 @@ void RamToken():
     finally { jj_save(9, xla); }
   }
 
+  static private boolean jj_2_11(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_11(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(10, xla); }
+  }
+
+  static private boolean jj_2_12(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    try { return !jj_3_12(); }
+    catch(LookaheadSuccess ls) { return true; }
+    finally { jj_save(11, xla); }
+  }
+
+  static private boolean jj_3_10() {
+    if (jj_scan_token(TIMES)) return true;
+    if (jj_3R_20()) return true;
+    return false;
+  }
+
   static private boolean jj_3_1() {
-    if (jj_3R_15()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_7() {
-    if (jj_scan_token(PLUS)) return true;
-    if (jj_3R_18()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_23() {
-    if (jj_3R_27()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_34() {
-    if (jj_scan_token(NEW)) return true;
+    if (jj_3R_16()) return true;
     return false;
   }
 
   static private boolean jj_3R_17() {
-    if (jj_3R_18()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_10() {
-    if (jj_scan_token(NEW)) return true;
-    if (jj_scan_token(INT)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_33() {
-    if (jj_scan_token(THIS)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_32() {
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_22() {
-    if (jj_scan_token(SEMICOLON)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_6() {
-    if (jj_scan_token(LESSTHAN)) return true;
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_31() {
-    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_3R_22()) return true;
     return false;
   }
 
   static private boolean jj_3R_19() {
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_22()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_3R_23()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_30() {
-    if (jj_scan_token(FALSE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_29() {
-    if (jj_scan_token(TRUE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_21() {
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_28() {
-    if (jj_scan_token(INTEGER_LITERAL)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_27() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_28()) {
-    jj_scanpos = xsp;
-    if (jj_3R_29()) {
-    jj_scanpos = xsp;
-    if (jj_3R_30()) {
-    jj_scanpos = xsp;
-    if (jj_3R_31()) {
-    jj_scanpos = xsp;
-    if (jj_3R_32()) {
-    jj_scanpos = xsp;
-    if (jj_3R_33()) {
-    jj_scanpos = xsp;
-    if (jj_3_10()) {
-    jj_scanpos = xsp;
-    if (jj_3R_34()) return true;
-    }
-    }
-    }
-    }
-    }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_15() {
     if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_11() {
+    if (jj_scan_token(DOT)) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  static private boolean jj_3_8() {
-    if (jj_scan_token(TIMES)) return true;
+  static private boolean jj_3_6() {
+    if (jj_scan_token(OR)) return true;
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_9() {
+    if (jj_scan_token(PLUS)) return true;
     if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_24() {
+    if (jj_3R_28()) return true;
     return false;
   }
 
@@ -856,13 +834,8 @@ void RamToken():
     return false;
   }
 
-  static private boolean jj_3R_16() {
-    if (jj_3R_21()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_26() {
-    if (jj_scan_token(IDENTIFIER)) return true;
+  static private boolean jj_3R_35() {
+    if (jj_scan_token(NEW)) return true;
     return false;
   }
 
@@ -871,19 +844,20 @@ void RamToken():
     return false;
   }
 
-  static private boolean jj_3R_25() {
+  static private boolean jj_3_12() {
+    if (jj_scan_token(NEW)) return true;
     if (jj_scan_token(INT)) return true;
     return false;
   }
 
-  static private boolean jj_3_9() {
-    if (jj_scan_token(DOT)) return true;
+  static private boolean jj_3R_16() {
+    if (jj_3R_21()) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  static private boolean jj_3R_24() {
-    if (jj_scan_token(BOOLEAN)) return true;
+  static private boolean jj_3R_34() {
+    if (jj_scan_token(THIS)) return true;
     return false;
   }
 
@@ -895,7 +869,123 @@ void RamToken():
 
   static private boolean jj_3_5() {
     if (jj_scan_token(AND)) return true;
-    if (jj_3R_16()) return true;
+    if (jj_3R_17()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_33() {
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
+    if (jj_scan_token(SEMICOLON)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_8() {
+    if (jj_scan_token(LESSTHANEQ)) return true;
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_32() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_20() {
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_23()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_3R_24()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_27() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_31() {
+    if (jj_scan_token(FALSE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_26() {
+    if (jj_scan_token(INT)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_7() {
+    if (jj_scan_token(LESSTHAN)) return true;
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_30() {
+    if (jj_scan_token(TRUE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_25() {
+    if (jj_scan_token(BOOLEAN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_29() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_28() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_29()) {
+    jj_scanpos = xsp;
+    if (jj_3R_30()) {
+    jj_scanpos = xsp;
+    if (jj_3R_31()) {
+    jj_scanpos = xsp;
+    if (jj_3R_32()) {
+    jj_scanpos = xsp;
+    if (jj_3R_33()) {
+    jj_scanpos = xsp;
+    if (jj_3R_34()) {
+    jj_scanpos = xsp;
+    if (jj_3_12()) {
+    jj_scanpos = xsp;
+    if (jj_3R_35()) return true;
+    }
+    }
+    }
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_22() {
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_2()) {
+    jj_scanpos = xsp;
+    if (jj_3R_25()) {
+    jj_scanpos = xsp;
+    if (jj_3R_26()) {
+    jj_scanpos = xsp;
+    if (jj_3R_27()) return true;
+    }
+    }
+    }
     return false;
   }
 
@@ -903,22 +993,6 @@ void RamToken():
     if (jj_scan_token(INT)) return true;
     if (jj_scan_token(LBRAC)) return true;
     if (jj_scan_token(RBRAC)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_20() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_2()) {
-    jj_scanpos = xsp;
-    if (jj_3R_24()) {
-    jj_scanpos = xsp;
-    if (jj_3R_25()) {
-    jj_scanpos = xsp;
-    if (jj_3R_26()) return true;
-    }
-    }
-    }
     return false;
   }
 
@@ -934,7 +1008,7 @@ void RamToken():
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[20];
+  static final private int[] jj_la1 = new int[21];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -942,12 +1016,12 @@ void RamToken():
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80000000,0x40000000,0x0,0x2000,0x20000,0x40000000,0x40000000,0x2000,0x2000,0x0,0x3000000,0x2000000,0x8000,0x40800,0x800,0x40000,0x200,0x0,0x20000,0x8200,};
+      jj_la1_0 = new int[] {0x80000000,0x40000000,0x0,0x2000,0x20000,0x40000000,0x40000000,0x2000,0x2000,0x0,0x300000,0x3000000,0x2000000,0x8000,0x40800,0x800,0x40000,0x200,0x0,0x20000,0x8200,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x80020,0x200,0x9800c,0x0,0x80020,0x80020,0x9800c,0x1800c,0x80000,0x0,0x0,0x0,0x0,0x0,0x0,0xc6002,0x100,0x0,0xc6102,};
+      jj_la1_1 = new int[] {0x0,0x80020,0x200,0x9801c,0x0,0x80020,0x80020,0x9801c,0x1801c,0x80000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc6002,0x100,0x0,0xc6102,};
    }
-  static final private JJCalls[] jj_2_rtns = new JJCalls[10];
+  static final private JJCalls[] jj_2_rtns = new JJCalls[12];
   static private boolean jj_rescan = false;
   static private int jj_gc = 0;
 
@@ -969,7 +1043,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -984,7 +1058,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1002,7 +1076,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1013,7 +1087,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1030,7 +1104,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1040,7 +1114,7 @@ void RamToken():
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1157,7 +1231,7 @@ void RamToken():
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 21; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1196,7 +1270,7 @@ void RamToken():
 
   static private void jj_rescan_token() {
     jj_rescan = true;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 12; i++) {
     try {
       JJCalls p = jj_2_rtns[i];
       do {
@@ -1213,6 +1287,8 @@ void RamToken():
             case 7: jj_3_8(); break;
             case 8: jj_3_9(); break;
             case 9: jj_3_10(); break;
+            case 10: jj_3_11(); break;
+            case 11: jj_3_12(); break;
           }
         }
         p = p.next;

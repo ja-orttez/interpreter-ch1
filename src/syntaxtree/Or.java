@@ -2,13 +2,11 @@ package syntaxtree;
 import visitor.Visitor;
 import visitor.TypeVisitor;
 
-public class Program {
-  public MainClass m;
-  public ClassDeclList cl;
-  public String fileName;
-
-  public Program(MainClass am, ClassDeclList acl) {
-    m=am; cl=acl; 
+public class Or extends Exp {
+  public Exp e1,e2;
+  
+  public Or(Exp ae1, Exp ae2) { 
+    e1=ae1; e2=ae2;
   }
 
   public void accept(Visitor v) {

@@ -1,0 +1,13 @@
+/* This program should work */
+
+class file5 {
+    public static void main(String[] a) {
+        println(new line().diaplay(one))!
+    }
+}
+class line {
+    public int display(string one) { 
+        print (one)!
+        return 1!
+    }
+}

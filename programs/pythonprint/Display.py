@@ -1,7 +1,7 @@
 
 class Add(): 
 	def it(self): 
-		sys.stdout.write ("Welcome ")
+		print ("Welcome "),
 		return 1
 
 import sys

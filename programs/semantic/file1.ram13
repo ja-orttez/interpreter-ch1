@@ -1,0 +1,16 @@
+/* This program should not work */
+
+class file1 {
+    public static void main(String[] a) {
+        println(new Break().Run(those))!
+    }
+}
+class Break {
+    public String display(int r) { //display was never call and run never created
+        while(0 lt r){
+            print(r)!
+            r = (r - 1)!
+        }
+        return list!
+    }
+}

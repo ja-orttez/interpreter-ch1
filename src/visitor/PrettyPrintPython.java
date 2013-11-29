@@ -221,9 +221,9 @@ String myProgram;
   
   // Exp e;
   public void visit(Print n) {
-    System.out.print("sys.stdout.write (\"");
+    System.out.print("print ");
     n.e.accept(this);
-    System.out.print(" \")");
+    System.out.print(" ,");
   }
   
   // Exp e;
@@ -262,6 +262,15 @@ String myProgram;
     System.out.print(")");
   }
 
+    // Exp e1,e2;
+  public void visit(Or n) {
+    System.out.print("(");
+    n.e1.accept(this);
+    System.out.print(" or ");
+    n.e2.accept(this);
+    System.out.print(")");
+  }
+  
   // Exp e1,e2;
   public void visit(LessThan n) {
     System.out.print("(");

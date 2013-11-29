@@ -200,9 +200,9 @@ public class ASTPrintVisitor implements Visitor {
   
     // Exp e;
     public void visit(Println n) {
-	System.out.print("Print(");
+	System.out.print("Println(");
 	n.e.accept(this);
-	System.out.println(")");
+	System.out.print(")");
     }
     
     // Identifier i;
@@ -235,6 +235,15 @@ public class ASTPrintVisitor implements Visitor {
 	n.e2.accept(this);
 	System.out.print(")");
     }
+    
+    // Exp e1,e2;
+    public void visit(Or n) {
+	System.out.print("Or(");
+	n.e1.accept(this);
+	System.out.print(", ");
+	n.e2.accept(this);
+	System.out.print(")");
+    }    
 
     // Exp e1,e2;
     public void visit(LessThan n) {

@@ -247,6 +247,8 @@ Statement Statement() :
     Statement s2;
     Exp e2;
     Identifier i;
+    Identifier i2;
+    Type t;
 }
 {
     <LBRACE> 
@@ -267,7 +269,16 @@ Statement Statement() :
     <RPAREN> 
     s1 = Statement()
     { return new While(e1, s1); } 
-    | 
+    |
+    <FOREACH> <LPAREN>
+    t = Type()
+    <IDENTIFIER> { i = new Identifier(token.image); } 
+    <COLON> 
+    <IDENTIFIER> { i2 = new Identifier(token.image); }
+    <RPAREN>
+    s1 = Statement()
+    { return new Foreach(t, i, i, s1); } 
+    |
     <PRINT> <LPAREN> 
     e1 = Exp() 
     <RPAREN> <END> 
@@ -328,6 +339,22 @@ Exp AndExp() :
     { return e1; }
 }
 
+Exp OrExp() : 
+{
+    Exp e1, e2;
+} 
+{        
+    e1 = EqualityExp()
+    (
+        LOOKAHEAD(2)
+        <OR> 
+        e2 = EqualityExp()
+        { e1 = new Or(e1, e2); }
+    )*
+
+    { return e1; }
+}
+
 Exp EqualityExp() : 
 {
     Exp e;
@@ -348,6 +375,10 @@ Exp RelationalExp() :
         <LESSTHAN> 
         e2 = AdditiveExp()
         { e1 = new LessThan(e1, e2); }
+        |LOOKAHEAD(2)
+        <LESSTHANEQ> 
+        e2 = AdditiveExp()
+        { e1 = new LessThanEq(e1, e2); }
     )*
 
     { return e1; }
